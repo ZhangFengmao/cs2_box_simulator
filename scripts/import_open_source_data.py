@@ -12,12 +12,12 @@ ROOT = Path(__file__).resolve().parents[1]
 COLLECTIONS_DIR = ROOT / "assets" / "collections"
 SOURCE = COLLECTIONS_DIR / "collections.json"
 DESTINATION = COLLECTIONS_DIR / "collections-data.js"
-EXPECTED_CASES = ("recoil", "dreams", "revolution")
+EXPECTED_CASES = ("recoil", "dreams", "revolution", "fever")
 
 
 def validate_collection_data(data: object) -> list[dict]:
     if not isinstance(data, list) or len(data) != len(EXPECTED_CASES):
-        raise ValueError("collections.json must contain exactly three cases")
+        raise ValueError(f"collections.json must contain exactly {len(EXPECTED_CASES)} cases")
 
     case_ids = tuple(case.get("id") for case in data if isinstance(case, dict))
     if case_ids != EXPECTED_CASES:

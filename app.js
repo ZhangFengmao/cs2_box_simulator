@@ -1,8 +1,9 @@
 const importedCollections = Object.fromEntries((window.COLLECTIONS_DATA || []).map(item => [item.id, item]));
 const CASES = [
-  { id: "recoil", name: "反冲武器箱", key: "反冲武器箱钥匙", series: "RECOIL COLLECTION", image: "assets/case-recoil.webp", tint: "#9eab65", rgb: "158,171,101" },
-  { id: "dreams", name: "梦魇武器箱", key: "梦魇武器箱钥匙", series: "DREAMS & NIGHTMARES", image: "assets/case-dreams.webp", tint: "#9064cb", rgb: "144,100,203" },
-  { id: "revolution", name: "变革武器箱", key: "变革武器箱钥匙", series: "REVOLUTION COLLECTION", image: "assets/case-revolution.webp", tint: "#df7936", rgb: "223,121,54" }
+  { id: "recoil", name: "反冲武器箱", key: "反冲武器箱钥匙", series: "RECOIL COLLECTION", image: "assets/items/recoil/case.png", tint: "#9eab65", rgb: "158,171,101" },
+  { id: "dreams", name: "梦魇武器箱", key: "梦魇武器箱钥匙", series: "DREAMS & NIGHTMARES", image: "assets/items/dreams/case.png", tint: "#9064cb", rgb: "144,100,203" },
+  { id: "revolution", name: "变革武器箱", key: "变革武器箱钥匙", series: "REVOLUTION COLLECTION", image: "assets/items/revolution/case.png", tint: "#df7936", rgb: "223,121,54" },
+  { id: "fever", name: "热潮武器箱", key: "热潮武器箱钥匙", series: "FEVER COLLECTION", image: "assets/items/fever/case.png", tint: "#d55b3e", rgb: "213,91,62" }
 ].map(item => ({
   ...item,
   image: importedCollections[item.id]?.image || item.image,
@@ -24,6 +25,7 @@ const SPECIAL_TOKEN = {
   image: null,
   concealed: true
 };
+const ROULETTE_DURATION_MS = 6200;
 
 const STORAGE_PREFIX = "gongXiFaCai";
 const LEGACY_STORAGE_PREFIX = ["case", "Lab"].join("");
@@ -52,7 +54,13 @@ const rouletteTrack = $("#rouletteTrack");
 function loadStock() {
   try {
     const saved = JSON.parse(readStoredValue("Stock"));
-    return saved && CASES.every(item => saved[item.id]) ? saved : structuredClone(defaultStock);
+    if (!saved || typeof saved !== "object") return structuredClone(defaultStock);
+    return Object.fromEntries(CASES.map(item => {
+      const savedItem = saved[item.id];
+      const cases = Number.isInteger(savedItem?.cases) && savedItem.cases >= 0 ? savedItem.cases : 1;
+      const keys = Number.isInteger(savedItem?.keys) && savedItem.keys >= 0 ? savedItem.keys : 1;
+      return [item.id, { cases, keys }];
+    }));
   } catch { return structuredClone(defaultStock); }
 }
 
@@ -315,10 +323,10 @@ async function openCase() {
   const cardCenter = card.offsetLeft + card.offsetWidth / 2;
   const jitter = (Math.random() - .5) * 62;
   const target = windowWidth / 2 - cardCenter + jitter;
-  rouletteTrack.style.transition = "transform 7.2s cubic-bezier(.075,.67,.12,1)";
+  rouletteTrack.style.transition = `transform ${ROULETTE_DURATION_MS / 1000}s cubic-bezier(.075,.67,.12,1)`;
   requestAnimationFrame(() => rouletteTrack.style.transform = `translateX(${target}px)`);
-  runTickSequence(7200);
-  await delay(7220);
+  runTickSequence(ROULETTE_DURATION_MS);
+  await delay(ROULETTE_DURATION_MS + 20);
   clearInterval(percentTimer);
   $("#decryptPercent").textContent = "100%";
   if (winningRarity === 4) winner = pickItemForRarity(item, 4);
