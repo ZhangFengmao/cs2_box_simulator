@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090b0d" />
+    <title>恭喜发财 — CS2 开箱模拟器</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23a61d18%22/><circle cx=%2232%22 cy=%2232%22 r=%2221%22 fill=%22none%22 stroke=%22%23f3bd58%22 stroke-width=%223%22/><path d=%22M20 27h24M20 37h24M27 19v26M37 19v26%22 stroke=%22%23f3bd58%22 stroke-width=%224%22 stroke-linecap=%22round%22/></svg>" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="boot-screen" id="bootScreen" aria-hidden="true">
+      <div class="boot-mark">恭喜<span>发财</span></div>
+      <div class="boot-line"><i></i></div>
+      <p>正在连接安全库存...</p>
+    </div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="恭喜发财首页">
+        <span class="brand-mark" aria-hidden="true">财</span>
+        <span>恭喜<b>发财</b></span>
+      </a>
+      <nav aria-label="主导航">
+        <button class="nav-item active" id="openingNav" type="button">开箱</button>
+        <button class="nav-item" id="vaultNav" type="button">武器仓库 <small id="vaultNavCount">0</small></button>
+        <button class="nav-item upgrade-nav" type="button" disabled>升级 <small>即将推出</small></button>
+      </nav>
+      <div class="top-actions">
+        <button class="sound-toggle" id="soundToggle" type="button" aria-label="切换音效" aria-pressed="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Zm12.5 3a4.5 4.5 0 0 0-2.1-3.8v7.6a4.5 4.5 0 0 0 2.1-3.8Z"/></svg>
+          <span>音效</span>
+        </button>
+        <div class="profile"><span>DEMO</span><i>7</i></div>
+      </div>
+    </header>
+
+    <main class="workspace" id="openingWorkspace">
+      <aside class="inventory-panel">
+        <div class="panel-title">
+          <div><span class="eyebrow">STORAGE / 01</span><h1>我的仓库</h1></div>
+          <span class="stock-total" id="stockTotal">06</span>
+        </div>
+        <div class="inventory-tabs" role="tablist" aria-label="仓库类型">
+          <button class="active" type="button" data-tab="cases" role="tab" aria-selected="true">武器箱 <span id="caseTotal">3</span></button>
+          <button type="button" data-tab="keys" role="tab" aria-selected="false">钥匙 <span id="keyTotal">3</span></button>
+        </div>
+        <div class="inventory-list" id="inventoryList" aria-live="polite"></div>
+        <div class="supply-note">
+          <span class="pulse-dot"></span>
+          <p><b>本地演示模式</b><br />点击物品旁的 +，将同时补充匹配的箱子与钥匙。</p>
+        </div>
+      </aside>
+
+      <section class="opening-stage" aria-labelledby="selectedCaseName">
+        <div class="stage-topline">
+          <div class="stage-path"><span>仓库</span><i>/</i><b>开启容器</b></div>
+          <div class="secure-status"><i></i> 本地安全连接</div>
+        </div>
+
+        <div class="case-scene" id="caseScene">
+          <div class="ambient-ring ring-one"></div>
+          <div class="ambient-ring ring-two"></div>
+          <div class="case-glow"></div>
+          <img id="caseImage" src="assets/case-recoil.webp" alt="反冲武器箱" />
+          <div class="floor-shadow"></div>
+        </div>
+
+        <div class="roulette-wrap" id="rouletteWrap" aria-hidden="true">
+          <div class="roulette-header">
+            <span>正在解密容器</span>
+            <b id="decryptPercent">00%</b>
+          </div>
+          <div class="roulette-window" id="rouletteWindow">
+            <div class="selection-beam"><i></i></div>
+            <div class="roulette-track" id="rouletteTrack"></div>
+          </div>
+          <div class="scanline"></div>
+        </div>
+
+        <div class="case-meta" id="caseMeta">
+          <span class="series-tag" id="caseSeries">RECOIL COLLECTION</span>
+          <h2 id="selectedCaseName">反冲武器箱</h2>
+          <p>选择对应钥匙，开启后将随机获得一件收藏品。</p>
+        </div>
+
+        <div class="open-controls" id="openControls">
+          <button class="key-slot" id="keySlot" type="button" aria-label="已选择反冲武器箱钥匙">
+            <span class="key-icon"><i></i></span>
+            <span><small>已匹配钥匙</small><b id="selectedKeyName">反冲武器箱钥匙</b></span>
+            <em id="selectedKeyCount">× 1</em>
+          </button>
+          <button class="open-button" id="openButton" type="button">
+            <span>开启容器</span>
+            <small>消耗 1 个箱子 + 1 把钥匙</small>
+            <i aria-hidden="true">→</i>
+          </button>
+        </div>
+      </section>
+
+      <aside class="details-panel">
+        <div class="drop-head">
+          <span class="eyebrow">CONTENTS / ODDS</span>
+          <h2>可能获得</h2>
+          <p>演示概率基于稀有度权重。</p>
+        </div>
+        <div class="rarity-list" id="rarityList">
+          <div style="--color:#5f84dc"><i></i><span>军规级</span><b>67.62%</b></div>
+          <div style="--color:#8b63d8"><i></i><span>受限</span><b>15.98%</b></div>
+          <div style="--color:#cf4a8d"><i></i><span>保密</span><b>12.80%</b></div>
+          <div style="--color:#ef4e4e"><i></i><span>隐秘</span><b>2.56%</b></div>
+          <div style="--color:#e8b34d"><i></i><span>罕见特殊物品</span><b>1.04%</b></div>
+        </div>
+        <div class="collection-preview">
+          <div class="preview-head"><span>收藏品预览</span><small id="previewCount">12 ITEMS</small></div>
+          <div class="preview-grid" id="previewGrid"></div>
+        </div>
+        <div class="recent-drop" id="recentDrop">
+          <span>最近获得</span>
+          <p>尚无开箱记录</p>
+        </div>
+      </aside>
+    </main>
+
+    <main class="vault-workspace" id="vaultWorkspace" hidden>
+      <header class="vault-header">
+        <div>
+          <span class="eyebrow">LOCAL INVENTORY / ITEMS</span>
+          <h1>武器仓库</h1>
+          <p>所有开箱所得物品均保存在当前浏览器的本地缓存中。</p>
+        </div>
+        <div class="vault-summary">
+          <span><b id="vaultTotal">0</b><small>全部物品</small></span>
+          <i></i>
+          <span><b id="vaultGoldTotal">0</b><small>特殊物品</small></span>
+        </div>
+      </header>
+      <div class="vault-toolbar">
+        <div class="vault-filters" id="vaultFilters" role="group" aria-label="按稀有度筛选">
+          <button class="active" type="button" data-rarity="all">全部</button>
+          <button type="button" data-rarity="0"><i style="--filter-color:#5f84dc"></i>蓝</button>
+          <button type="button" data-rarity="1"><i style="--filter-color:#8b63d8"></i>紫</button>
+          <button type="button" data-rarity="2"><i style="--filter-color:#cf4a8d"></i>粉</button>
+          <button type="button" data-rarity="3"><i style="--filter-color:#ef4e4e"></i>红</button>
+          <button type="button" data-rarity="4"><i style="--filter-color:#e8b34d"></i>金</button>
+        </div>
+        <div class="vault-toolbar-meta">
+          <label class="vault-sort">
+            <span>排序</span>
+            <select id="vaultSort" aria-label="仓库排序方式">
+              <option value="newest">最新获得</option>
+              <option value="rarity-desc">品质：高到低</option>
+              <option value="rarity-asc">品质：低到高</option>
+            </select>
+          </label>
+          <span id="vaultVisibleCount">0 件物品</span>
+        </div>
+      </div>
+      <section class="vault-grid" id="vaultGrid" aria-live="polite"></section>
+      <section class="vault-empty" id="vaultEmpty" hidden>
+        <span class="empty-mark">◇</span>
+        <h2>仓库中还没有物品</h2>
+        <p>开启任意武器箱，获得的物品会自动存入这里。</p>
+        <button id="emptyOpenButton" type="button">前往开箱 <i>→</i></button>
+      </section>
+    </main>
+
+    <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+    <div class="result-modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultName" aria-hidden="true">
+      <div class="result-backdrop"></div>
+      <div class="result-content" id="resultContent">
+        <div class="result-rays" aria-hidden="true"></div>
+        <span class="result-kicker">ITEM ACQUIRED</span>
+        <div class="result-weapon" id="resultWeapon"><img src="assets/weapon-01.webp" alt="" /></div>
+        <div class="result-rarity" id="resultRarity">军规级</div>
+        <h2 id="resultName">M4A4 | 红色电路</h2>
+        <p id="resultCollection">反冲收藏品</p>
+        <div class="result-actions">
+          <button class="primary" id="openAgainButton" type="button">再开一次</button>
+          <button id="closeResultButton" type="button">放入仓库</button>
+        </div>
+        <small>此演示不包含真实交易或物品价值</small>
+      </div>
+    </div>
+
+    <script src="assets/collections/collections-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

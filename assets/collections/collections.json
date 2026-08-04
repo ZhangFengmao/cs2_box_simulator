@@ -1,0 +1,506 @@
+[
+  {
+    "id": "recoil",
+    "name": "反冲武器箱",
+    "image": "assets/case-recoil.webp",
+    "items": [
+      {
+        "weapon": "法玛斯",
+        "skin": "喵喵36",
+        "name": "法玛斯 | 喵喵36",
+        "rarity": 0,
+        "image": "assets/weapon-01.webp"
+      },
+      {
+        "weapon": "加利尔 AR",
+        "skin": "毁灭者",
+        "name": "加利尔 AR | 毁灭者",
+        "rarity": 0,
+        "image": "assets/weapon-05.webp"
+      },
+      {
+        "weapon": "M4A4",
+        "skin": "透明弹匣",
+        "name": "M4A4 | 透明弹匣",
+        "rarity": 0,
+        "image": "assets/weapon-06.webp"
+      },
+      {
+        "weapon": "MAC-10",
+        "skin": "萌猴迷彩",
+        "name": "MAC-10 | 萌猴迷彩",
+        "rarity": 0,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "内格夫",
+        "skin": "丢把枪",
+        "name": "内格夫 | 丢把枪",
+        "rarity": 0,
+        "image": "assets/weapon-01.webp"
+      },
+      {
+        "weapon": "UMP-45",
+        "skin": "路障",
+        "name": "UMP-45 | 路障",
+        "rarity": 0,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "格洛克 18 型",
+        "skin": "冬季战术",
+        "name": "格洛克 18 型 | 冬季战术",
+        "rarity": 0,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "R8 左轮手枪",
+        "skin": "疯狂老八",
+        "name": "R8 左轮手枪 | 疯狂老八",
+        "rarity": 1,
+        "image": "assets/weapon-08.webp"
+      },
+      {
+        "weapon": "M249",
+        "skin": "闹市区",
+        "name": "M249 | 闹市区",
+        "rarity": 1,
+        "image": "assets/weapon-01.webp"
+      },
+      {
+        "weapon": "SG 553",
+        "skin": "青龙",
+        "name": "SG 553 | 青龙",
+        "rarity": 1,
+        "image": "assets/weapon-11.webp"
+      },
+      {
+        "weapon": "P90",
+        "skin": "给爷冲",
+        "name": "P90 | 给爷冲",
+        "rarity": 1,
+        "image": "assets/weapon-03.webp"
+      },
+      {
+        "weapon": "双持贝瑞塔",
+        "skin": "食人花",
+        "name": "双持贝瑞塔 | 食人花",
+        "rarity": 1,
+        "image": "assets/weapon-08.webp"
+      },
+      {
+        "weapon": "AK-47",
+        "skin": "可燃冰",
+        "name": "AK-47 | 可燃冰",
+        "rarity": 2,
+        "image": "assets/weapon-06.webp"
+      },
+      {
+        "weapon": "P250",
+        "skin": "迷人幻象",
+        "name": "P250 | 迷人幻象",
+        "rarity": 2,
+        "image": "assets/weapon-08.webp"
+      },
+      {
+        "weapon": "截短霰弹枪",
+        "skin": "么么",
+        "name": "截短霰弹枪 | 么么",
+        "rarity": 2,
+        "image": "assets/weapon-09.webp"
+      },
+      {
+        "weapon": "USP 消音版",
+        "skin": "印花集",
+        "name": "USP 消音版 | 印花集",
+        "rarity": 3,
+        "image": "assets/weapon-08.webp"
+      },
+      {
+        "weapon": "AWP",
+        "skin": "迷人眼",
+        "name": "AWP | 迷人眼",
+        "rarity": 3,
+        "image": "assets/weapon-02.webp"
+      },
+      {
+        "weapon": "★ 狂牙手套",
+        "skin": "黄色斑纹",
+        "name": "狂牙手套（★） | 黄色斑纹",
+        "rarity": 4,
+        "image": "assets/special/recoil-glove-01.webp"
+      },
+      {
+        "weapon": "★ 狂牙手套",
+        "skin": "精神错乱",
+        "name": "狂牙手套（★） | 精神错乱",
+        "rarity": 4,
+        "image": "assets/special/recoil-glove-02.webp"
+      },
+      {
+        "weapon": "★ 狂牙手套",
+        "skin": "针尖",
+        "name": "狂牙手套（★） | 针尖",
+        "rarity": 4,
+        "image": "assets/special/recoil-glove-03.webp"
+      },
+      {
+        "weapon": "★ 狂牙手套",
+        "skin": "翡翠",
+        "name": "狂牙手套（★） | 翡翠",
+        "rarity": 4,
+        "image": "assets/special/recoil-glove-04.webp"
+      },
+      {
+        "weapon": "★ 驾驶手套",
+        "skin": "雪豹",
+        "name": "驾驶手套（★） | 雪豹",
+        "rarity": 4,
+        "image": "assets/special/recoil-glove-05.webp"
+      },
+      {
+        "weapon": "★ 驾驶手套",
+        "skin": "西装革履",
+        "name": "驾驶手套（★） | 西装革履",
+        "rarity": 4,
+        "image": "assets/special/recoil-glove-06.webp"
+      }
+    ]
+  },
+  {
+    "id": "dreams",
+    "name": "梦魇武器箱",
+    "image": "assets/case-dreams.webp",
+    "items": [
+      {
+        "weapon": "FN57",
+        "skin": "涂鸦潦草",
+        "name": "FN57 | 涂鸦潦草",
+        "rarity": 0,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "MAC-10",
+        "skin": "坐牢",
+        "name": "MAC-10 | 坐牢",
+        "rarity": 0,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "MAG-7",
+        "skin": "先见之明",
+        "name": "MAG-7 | 先见之明",
+        "rarity": 0,
+        "image": "assets/weapon-09.webp"
+      },
+      {
+        "weapon": "MP5-SD",
+        "skin": "小小噩梦",
+        "name": "MP5-SD | 小小噩梦",
+        "rarity": 0,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "P2000",
+        "skin": "升天",
+        "name": "P2000 | 升天",
+        "rarity": 0,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "SCAR-20",
+        "skin": "暗夜活死鸡",
+        "name": "SCAR-20 | 暗夜活死鸡",
+        "rarity": 0,
+        "image": "assets/weapon-12.webp"
+      },
+      {
+        "weapon": "截短霰弹枪",
+        "skin": "灵应牌",
+        "name": "截短霰弹枪 | 灵应牌",
+        "rarity": 0,
+        "image": "assets/weapon-09.webp"
+      },
+      {
+        "weapon": "PP-野牛",
+        "skin": "太空猫",
+        "name": "PP-野牛 | 太空猫",
+        "rarity": 1,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "G3SG1",
+        "skin": "梦之林地",
+        "name": "G3SG1 | 梦之林地",
+        "rarity": 1,
+        "image": "assets/weapon-02.webp"
+      },
+      {
+        "weapon": "M4A1 消音型",
+        "skin": "夜无眠",
+        "name": "M4A1 消音型 | 夜无眠",
+        "rarity": 1,
+        "image": "assets/weapon-11.webp"
+      },
+      {
+        "weapon": "XM1014",
+        "skin": "行尸攻势",
+        "name": "XM1014 | 行尸攻势",
+        "rarity": 1,
+        "image": "assets/weapon-09.webp"
+      },
+      {
+        "weapon": "USP 消音版",
+        "skin": "地狱门票",
+        "name": "USP 消音版 | 地狱门票",
+        "rarity": 1,
+        "image": "assets/weapon-08.webp"
+      },
+      {
+        "weapon": "双持贝瑞塔",
+        "skin": "瓜瓜",
+        "name": "双持贝瑞塔 | 瓜瓜",
+        "rarity": 2,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "法玛斯",
+        "skin": "目皆转睛",
+        "name": "法玛斯 | 目皆转睛",
+        "rarity": 2,
+        "image": "assets/weapon-07.webp"
+      },
+      {
+        "weapon": "MP7",
+        "skin": "幽幻深渊",
+        "name": "MP7 | 幽幻深渊",
+        "rarity": 2,
+        "image": "assets/weapon-03.webp"
+      },
+      {
+        "weapon": "AK-47",
+        "skin": "夜愿",
+        "name": "AK-47 | 夜愿",
+        "rarity": 3,
+        "image": "assets/weapon-01.webp"
+      },
+      {
+        "weapon": "MP9",
+        "skin": "星使",
+        "name": "MP9 | 星使",
+        "rarity": 3,
+        "image": "assets/weapon-03.webp"
+      },
+      {
+        "weapon": "★ 鲍伊猎刀",
+        "skin": "伽玛多普勒",
+        "name": "鲍伊猎刀（★） | 伽玛多普勒",
+        "rarity": 4,
+        "image": "assets/special/dreams-knife-01.webp"
+      },
+      {
+        "weapon": "★ 鲍伊猎刀",
+        "skin": "伽玛多普勒",
+        "name": "鲍伊猎刀（★） | 伽玛多普勒",
+        "rarity": 4,
+        "image": "assets/special/dreams-knife-02.webp"
+      },
+      {
+        "weapon": "★ 鲍伊猎刀",
+        "skin": "伽玛多普勒",
+        "name": "鲍伊猎刀（★） | 伽玛多普勒",
+        "rarity": 4,
+        "image": "assets/special/dreams-knife-03.webp"
+      },
+      {
+        "weapon": "★ 鲍伊猎刀",
+        "skin": "伽玛多普勒",
+        "name": "鲍伊猎刀（★） | 伽玛多普勒",
+        "rarity": 4,
+        "image": "assets/special/dreams-knife-04.webp"
+      },
+      {
+        "weapon": "★ 鲍伊猎刀",
+        "skin": "伽玛多普勒",
+        "name": "鲍伊猎刀（★） | 伽玛多普勒",
+        "rarity": 4,
+        "image": "assets/special/dreams-knife-05.webp"
+      },
+      {
+        "weapon": "★ 鲍伊猎刀",
+        "skin": "传说",
+        "name": "鲍伊猎刀（★） | 传说",
+        "rarity": 4,
+        "image": "assets/special/dreams-knife-06.webp"
+      }
+    ]
+  },
+  {
+    "id": "revolution",
+    "name": "变革武器箱",
+    "image": "assets/case-revolution.webp",
+    "items": [
+      {
+        "weapon": "MAG-7",
+        "skin": "鱼长梦短",
+        "name": "MAG-7 | 鱼长梦短",
+        "rarity": 0,
+        "image": "assets/weapon-09.webp"
+      },
+      {
+        "weapon": "MP9",
+        "skin": "羽量级",
+        "name": "MP9 | 羽量级",
+        "rarity": 0,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "SCAR-20",
+        "skin": "碎片",
+        "name": "SCAR-20 | 碎片",
+        "rarity": 0,
+        "image": "assets/weapon-02.webp"
+      },
+      {
+        "weapon": "P250",
+        "skin": "重构",
+        "name": "P250 | 重构",
+        "rarity": 0,
+        "image": "assets/weapon-08.webp"
+      },
+      {
+        "weapon": "MP5-SD",
+        "skin": "液化",
+        "name": "MP5-SD | 液化",
+        "rarity": 0,
+        "image": "assets/weapon-03.webp"
+      },
+      {
+        "weapon": "SG 553",
+        "skin": "赛博之力",
+        "name": "SG 553 | 赛博之力",
+        "rarity": 0,
+        "image": "assets/weapon-01.webp"
+      },
+      {
+        "weapon": "Tec-9",
+        "skin": "叛逆",
+        "name": "Tec-9 | 叛逆",
+        "rarity": 0,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "M4A1 消音型",
+        "skin": "隐伏帝王龙",
+        "name": "M4A1 消音型 | 隐伏帝王龙",
+        "rarity": 1,
+        "image": "assets/weapon-06.webp"
+      },
+      {
+        "weapon": "格洛克 18 型",
+        "skin": "圆影玉兔",
+        "name": "格洛克 18 型 | 圆影玉兔",
+        "rarity": 1,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "MAC-10",
+        "skin": "错觉",
+        "name": "MAC-10 | 错觉",
+        "rarity": 1,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "R8 左轮手枪",
+        "skin": "蕉农炮",
+        "name": "R8 左轮手枪 | 蕉农炮",
+        "rarity": 1,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "P90",
+        "skin": "元女王",
+        "name": "P90 | 元女王",
+        "rarity": 1,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "AWP",
+        "skin": "金粉肆蛇",
+        "name": "AWP | 金粉肆蛇",
+        "rarity": 2,
+        "image": "assets/weapon-02.webp"
+      },
+      {
+        "weapon": "UMP-45",
+        "skin": "野孩子",
+        "name": "UMP-45 | 野孩子",
+        "rarity": 2,
+        "image": "assets/weapon-10.webp"
+      },
+      {
+        "weapon": "P2000",
+        "skin": "变态杀戮",
+        "name": "P2000 | 变态杀戮",
+        "rarity": 2,
+        "image": "assets/weapon-04.webp"
+      },
+      {
+        "weapon": "M4A4",
+        "skin": "反冲精英",
+        "name": "M4A4 | 反冲精英",
+        "rarity": 3,
+        "image": "assets/weapon-01.webp"
+      },
+      {
+        "weapon": "AK-47",
+        "skin": "一发入魂",
+        "name": "AK-47 | 一发入魂",
+        "rarity": 3,
+        "image": "assets/weapon-05.webp"
+      },
+      {
+        "weapon": "★ 驾驶手套",
+        "skin": "蓝紫格子",
+        "name": "驾驶手套（★） | 蓝紫格子",
+        "rarity": 4,
+        "image": "assets/special/revolution-glove-01.webp"
+      },
+      {
+        "weapon": "★ 驾驶手套",
+        "skin": "王蛇",
+        "name": "驾驶手套（★） | 王蛇",
+        "rarity": 4,
+        "image": "assets/special/revolution-glove-02.webp"
+      },
+      {
+        "weapon": "★ 驾驶手套",
+        "skin": "墨绿色调",
+        "name": "驾驶手套（★） | 墨绿色调",
+        "rarity": 4,
+        "image": "assets/special/revolution-glove-03.webp"
+      },
+      {
+        "weapon": "★ 驾驶手套",
+        "skin": "超越",
+        "name": "驾驶手套（★） | 超越",
+        "rarity": 4,
+        "image": "assets/special/revolution-glove-04.webp"
+      },
+      {
+        "weapon": "★ 裹手",
+        "skin": "钴蓝骷髅",
+        "name": "裹手（★） | 钴蓝骷髅",
+        "rarity": 4,
+        "image": "assets/special/revolution-glove-05.webp"
+      },
+      {
+        "weapon": "★ 裹手",
+        "skin": "套印",
+        "name": "裹手（★） | 套印",
+        "rarity": 4,
+        "image": "assets/special/revolution-glove-06.webp"
+      }
+    ]
+  }
+]

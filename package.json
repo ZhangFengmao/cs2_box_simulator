@@ -1,0 +1,10 @@
+{
+  "name": "cs2_box_simulator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "本地运行的 CS2 风格开箱模拟器",
+  "scripts": {
+    "start": "python3 -m http.server 8080 --bind 0.0.0.0",
+    "serve": "python3 -m http.server 8080 --bind 0.0.0.0"
+  }
+}
