@@ -41,13 +41,13 @@
           <span class="stock-total" id="stockTotal">06</span>
         </div>
         <div class="inventory-tabs" role="tablist" aria-label="仓库类型">
-          <button class="active" type="button" data-tab="cases" role="tab" aria-selected="true">武器箱 <span id="caseTotal">3</span></button>
+          <button class="active" type="button" data-tab="cases" role="tab" aria-selected="true">容器 <span id="caseTotal">5</span></button>
           <button type="button" data-tab="keys" role="tab" aria-selected="false">钥匙 <span id="keyTotal">3</span></button>
         </div>
         <div class="inventory-list" id="inventoryList" aria-live="polite"></div>
         <div class="supply-note">
           <span class="pulse-dot"></span>
-          <p><b>本地演示模式</b><br />点击物品旁的 +，将同时补充匹配的箱子与钥匙。</p>
+          <p><b>本地演示模式</b><br />点击物品旁的 +，补充武器箱与钥匙或无需钥匙的纪念包。</p>
         </div>
       </aside>
 
@@ -80,7 +80,7 @@
         <div class="case-meta" id="caseMeta">
           <span class="series-tag" id="caseSeries">RECOIL COLLECTION</span>
           <h2 id="selectedCaseName">反冲武器箱</h2>
-          <p>选择对应钥匙，开启后将随机获得一件收藏品。</p>
+          <p id="caseDescription">选择对应钥匙，开启后将随机获得一件收藏品。</p>
         </div>
 
         <div class="open-controls" id="openControls">
@@ -104,11 +104,11 @@
           <p>演示概率基于稀有度权重。</p>
         </div>
         <div class="rarity-list" id="rarityList">
-          <div style="--color:#5f84dc"><i></i><span>军规级</span><b>67.62%</b></div>
-          <div style="--color:#8b63d8"><i></i><span>受限</span><b>15.98%</b></div>
-          <div style="--color:#cf4a8d"><i></i><span>保密</span><b>12.80%</b></div>
-          <div style="--color:#ef4e4e"><i></i><span>隐秘</span><b>2.56%</b></div>
-          <div style="--color:#e8b34d"><i></i><span>罕见特殊物品</span><b>1.04%</b></div>
+          <div style="--color:#4b69ff"><i></i><span>军规级</span><b>66.62%</b></div>
+          <div style="--color:#8847ff"><i></i><span>受限</span><b>15.98%</b></div>
+          <div style="--color:#d32ce6"><i></i><span>保密</span><b>12.80%</b></div>
+          <div style="--color:#eb4b4b"><i></i><span>隐秘</span><b>3.06%</b></div>
+          <div style="--color:#e8b34d"><i></i><span>罕见特殊物品</span><b>1.54%</b></div>
         </div>
         <div class="collection-preview">
           <div class="preview-head"><span>收藏品预览</span><small id="previewCount">12 ITEMS</small></div>
@@ -137,11 +137,13 @@
       <div class="vault-toolbar">
         <div class="vault-filters" id="vaultFilters" role="group" aria-label="按稀有度筛选">
           <button class="active" type="button" data-rarity="all">全部</button>
-          <button type="button" data-rarity="0"><i style="--filter-color:#5f84dc"></i>蓝</button>
-          <button type="button" data-rarity="1"><i style="--filter-color:#8b63d8"></i>紫</button>
-          <button type="button" data-rarity="2"><i style="--filter-color:#cf4a8d"></i>粉</button>
-          <button type="button" data-rarity="3"><i style="--filter-color:#ef4e4e"></i>红</button>
-          <button type="button" data-rarity="4"><i style="--filter-color:#e8b34d"></i>金</button>
+          <button type="button" data-rarity="0"><i style="--filter-color:#b0c3d9"></i>灰</button>
+          <button type="button" data-rarity="1"><i style="--filter-color:#5e98d9"></i>浅蓝</button>
+          <button type="button" data-rarity="2"><i style="--filter-color:#4b69ff"></i>蓝</button>
+          <button type="button" data-rarity="3"><i style="--filter-color:#8847ff"></i>紫</button>
+          <button type="button" data-rarity="4"><i style="--filter-color:#d32ce6"></i>粉</button>
+          <button type="button" data-rarity="5"><i style="--filter-color:#eb4b4b"></i>红</button>
+          <button type="button" data-rarity="6"><i style="--filter-color:#e8b34d"></i>金</button>
         </div>
         <div class="vault-toolbar-meta">
           <label class="vault-sort">
@@ -159,7 +161,7 @@
       <section class="vault-empty" id="vaultEmpty" hidden>
         <span class="empty-mark">◇</span>
         <h2>仓库中还没有物品</h2>
-        <p>开启任意武器箱，获得的物品会自动存入这里。</p>
+        <p>开启任意容器，获得的物品会自动存入这里。</p>
         <button id="emptyOpenButton" type="button">前往开箱 <i>→</i></button>
       </section>
     </main>

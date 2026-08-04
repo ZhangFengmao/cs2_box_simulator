@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 COLLECTIONS_DIR = ROOT / "assets" / "collections"
 SOURCE = COLLECTIONS_DIR / "collections.json"
 DESTINATION = COLLECTIONS_DIR / "collections-data.js"
-EXPECTED_CASES = ("recoil", "dreams", "revolution", "fever")
+EXPECTED_CASES = ("recoil", "dreams", "revolution", "fever", "cobblestone")
 
 
 def validate_collection_data(data: object) -> list[dict]:
@@ -33,7 +33,7 @@ def validate_collection_data(data: object) -> list[dict]:
             required = ("weapon", "skin", "name", "rarity", "image")
             if not isinstance(item, dict) or any(key not in item for key in required):
                 raise ValueError(f"case {case['id']} contains an invalid item")
-            if not isinstance(item["rarity"], int) or not 0 <= item["rarity"] <= 4:
+            if not isinstance(item["rarity"], int) or not 0 <= item["rarity"] <= 6:
                 raise ValueError(f"invalid rarity in case {case['id']}")
             image_path = item["image"]
             if not isinstance(image_path, str) or not image_path.startswith("assets/"):

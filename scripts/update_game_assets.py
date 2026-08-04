@@ -31,12 +31,16 @@ CASE_NAMES = {
     "dreams": "梦魇武器箱",
     "revolution": "变革武器箱",
     "fever": "热潮武器箱",
+    "cobblestone": "2014年 ESL One 科隆锦标赛古堡激战纪念包",
 }
+DISPLAY_NAMES = {"cobblestone": "古堡激战纪念包"}
 RARITY_BY_ID = {
-    "rarity_rare_weapon": 0,
-    "rarity_mythical_weapon": 1,
-    "rarity_legendary_weapon": 2,
-    "rarity_ancient_weapon": 3,
+    "rarity_common_weapon": 0,
+    "rarity_uncommon_weapon": 1,
+    "rarity_rare_weapon": 2,
+    "rarity_mythical_weapon": 3,
+    "rarity_legendary_weapon": 4,
+    "rarity_ancient_weapon": 5,
 }
 PHASE_LABELS = {
     "Ruby": "红宝石",
@@ -91,7 +95,7 @@ def build_item(remote_item: dict, rarity: int) -> dict:
     parts = remote_item["name"].split(" | ", 1)
     weapon = parts[0].replace("（★）", "").strip()
     skin = parts[1] if len(parts) == 2 else "原版"
-    if rarity == 4:
+    if rarity == 6:
         weapon = f"★ {weapon}"
         phase = remote_item.get("phase")
         if phase:
@@ -111,13 +115,25 @@ def build_collection(case_id: str, remote_case: dict) -> dict:
         build_item(item, RARITY_BY_ID[item["rarity"]["id"]])
         for item in remote_case.get("contains", [])
     ]
-    items += [build_item(item, 4) for item in remote_case.get("contains_rare", [])]
+    items += [build_item(item, 6) for item in remote_case.get("contains_rare", [])]
     return {
         "id": case_id,
-        "name": CASE_NAMES[case_id],
+        "name": DISPLAY_NAMES.get(case_id, CASE_NAMES[case_id]),
         "image": "",
+        "rarityVersion": 2,
         "items": items,
     }
+
+
+def migrate_collection_rarities(collection: dict) -> None:
+    """Move the original five tiers into the shared seven-tier scale."""
+
+    if collection.get("rarityVersion") == 2:
+        return
+    for item in collection.get("items", []):
+        old_rarity = item["rarity"]
+        item["rarity"] = 6 if old_rarity == 4 else old_rarity + 2
+    collection["rarityVersion"] = 2
 
 
 def download_png(job: tuple[str, Path], force: bool) -> Path:
@@ -153,6 +169,8 @@ def main() -> None:
     remote_crates = read_manifest(args.manifest)
     remote_by_name = {crate.get("name"): crate for crate in remote_crates}
     collections = json.loads(COLLECTIONS_PATH.read_text(encoding="utf-8"))
+    for collection in collections:
+        migrate_collection_rarities(collection)
     collections_by_id = {collection["id"]: collection for collection in collections}
     for case_id, case_name in CASE_NAMES.items():
         if case_id not in collections_by_id:
@@ -174,8 +192,8 @@ def main() -> None:
         collection["image"] = case_relative.as_posix()
         jobs.append((remote_case["image"], ROOT / case_relative))
 
-        regular = [item for item in collection["items"] if item["rarity"] < 4]
-        special = [item for item in collection["items"] if item["rarity"] == 4]
+        regular = [item for item in collection["items"] if item["rarity"] != 6]
+        special = [item for item in collection["items"] if item["rarity"] == 6]
         pairs = pair_items(regular, remote_case.get("contains", []))
         pairs += pair_items(special, remote_case.get("contains_rare", []))
 

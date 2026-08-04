@@ -1,27 +1,46 @@
 const importedCollections = Object.fromEntries((window.COLLECTIONS_DATA || []).map(item => [item.id, item]));
+const RARITIES = [
+  { name: "消费级", shortName: "灰", color: "#b0c3d9", rgb: "176,195,217" },
+  { name: "工业级", shortName: "浅蓝", color: "#5e98d9", rgb: "94,152,217" },
+  { name: "军规级", shortName: "蓝", color: "#4b69ff", rgb: "75,105,255" },
+  { name: "受限", shortName: "紫", color: "#8847ff", rgb: "136,71,255" },
+  { name: "保密", shortName: "粉", color: "#d32ce6", rgb: "211,44,230" },
+  { name: "隐秘", shortName: "红", color: "#eb4b4b", rgb: "235,75,75" },
+  { name: "罕见特殊物品", shortName: "金", color: "#e8b34d", rgb: "232,179,77" }
+];
+const STANDARD_ODDS = [
+  { rarity: 2, weight: 6662 },
+  { rarity: 3, weight: 1598 },
+  { rarity: 4, weight: 1280 },
+  { rarity: 5, weight: 306 },
+  { rarity: 6, weight: 154 }
+];
+const COBBLESTONE_ODDS = [
+  { rarity: 0, weight: 78532 },
+  { rarity: 1, weight: 16000 },
+  { rarity: 2, weight: 3200 },
+  { rarity: 3, weight: 640 },
+  { rarity: 4, weight: 128 },
+  { rarity: 5, weight: 1500 }
+];
 const CASES = [
-  { id: "recoil", name: "反冲武器箱", key: "反冲武器箱钥匙", series: "RECOIL COLLECTION", image: "assets/items/recoil/case.png", tint: "#9eab65", rgb: "158,171,101" },
-  { id: "dreams", name: "梦魇武器箱", key: "梦魇武器箱钥匙", series: "DREAMS & NIGHTMARES", image: "assets/items/dreams/case.png", tint: "#9064cb", rgb: "144,100,203" },
-  { id: "revolution", name: "变革武器箱", key: "变革武器箱钥匙", series: "REVOLUTION COLLECTION", image: "assets/items/revolution/case.png", tint: "#df7936", rgb: "223,121,54" },
-  { id: "fever", name: "热潮武器箱", key: "热潮武器箱钥匙", series: "FEVER COLLECTION", image: "assets/items/fever/case.png", tint: "#d55b3e", rgb: "213,91,62" }
+  { id: "recoil", name: "反冲武器箱", key: "反冲武器箱钥匙", series: "RECOIL COLLECTION", resultCollection: "反冲收藏品", image: "assets/items/recoil/case.png", tint: "#9eab65", rgb: "158,171,101" },
+  { id: "dreams", name: "梦魇武器箱", key: "梦魇武器箱钥匙", series: "DREAMS & NIGHTMARES", resultCollection: "梦魇收藏品", image: "assets/items/dreams/case.png", tint: "#9064cb", rgb: "144,100,203" },
+  { id: "revolution", name: "变革武器箱", key: "变革武器箱钥匙", series: "REVOLUTION COLLECTION", resultCollection: "变革收藏品", image: "assets/items/revolution/case.png", tint: "#df7936", rgb: "223,121,54" },
+  { id: "fever", name: "热潮武器箱", key: "热潮武器箱钥匙", series: "FEVER COLLECTION", resultCollection: "热潮收藏品", image: "assets/items/fever/case.png", tint: "#d55b3e", rgb: "213,91,62" },
+  { id: "cobblestone", name: "古堡激战纪念包", key: null, requiresKey: false, odds: COBBLESTONE_ODDS, series: "THE COBBLESTONE COLLECTION", resultCollection: "古堡激战收藏品", image: "assets/items/cobblestone/case.png", tint: "#b69a63", rgb: "182,154,99" }
 ].map(item => ({
   ...item,
+  requiresKey: item.requiresKey !== false,
+  odds: item.odds || STANDARD_ODDS,
   image: importedCollections[item.id]?.image || item.image,
   pool: importedCollections[item.id]?.items || []
 }));
 
-const RARITIES = [
-  { name: "军规级", color: "#5f84dc", rgb: "95,132,220", weight: 6762 },
-  { name: "受限", color: "#8b63d8", rgb: "139,99,216", weight: 1598 },
-  { name: "保密", color: "#cf4a8d", rgb: "207,74,141", weight: 1280 },
-  { name: "隐秘", color: "#ef4e4e", rgb: "239,78,78", weight: 256 },
-  { name: "罕见特殊物品", color: "#e8b34d", rgb: "232,179,77", weight: 104 }
-];
-
 const SPECIAL_TOKEN = {
   weapon: "★",
   skin: "罕见特殊物品",
-  rarity: 4,
+  rarity: 6,
   image: null,
   concealed: true
 };
@@ -30,12 +49,13 @@ const ROULETTE_DURATION_MS = 6200;
 const STORAGE_PREFIX = "gongXiFaCai";
 const LEGACY_STORAGE_PREFIX = ["case", "Lab"].join("");
 const readStoredValue = suffix => localStorage.getItem(`${STORAGE_PREFIX}${suffix}`) ?? localStorage.getItem(`${LEGACY_STORAGE_PREFIX}${suffix}`);
-const defaultStock = Object.fromEntries(CASES.map(item => [item.id, { cases: 1, keys: 1 }]));
+const defaultStock = Object.fromEntries(CASES.map(item => [item.id, { cases: 1, keys: item.requiresKey ? 1 : 0 }]));
 
 let stock = loadStock();
 let ownedItems = loadOwnedItems();
 
-let selectedId = readStoredValue("Selected") || "recoil";
+const storedSelectedId = readStoredValue("Selected");
+let selectedId = CASES.some(item => item.id === storedSelectedId) ? storedSelectedId : "recoil";
 let activeTab = "cases";
 let vaultFilter = "all";
 let vaultSort = ["newest", "rarity-desc", "rarity-asc"].includes(readStoredValue("VaultSort"))
@@ -58,7 +78,8 @@ function loadStock() {
     return Object.fromEntries(CASES.map(item => {
       const savedItem = saved[item.id];
       const cases = Number.isInteger(savedItem?.cases) && savedItem.cases >= 0 ? savedItem.cases : 1;
-      const keys = Number.isInteger(savedItem?.keys) && savedItem.keys >= 0 ? savedItem.keys : 1;
+      const savedKeysAreValid = Number.isInteger(savedItem?.keys) && savedItem.keys >= 0;
+      const keys = item.requiresKey ? (savedKeysAreValid ? savedItem.keys : 1) : 0;
       return [item.id, { cases, keys }];
     }));
   } catch { return structuredClone(defaultStock); }
@@ -73,13 +94,26 @@ function loadOwnedItems() {
   try {
     const saved = JSON.parse(readStoredValue("OwnedItems"));
     if (!Array.isArray(saved)) return [];
-    return saved.filter(item =>
+    let migrated = false;
+    const normalizedItems = saved.map(item => {
+      if (!item || item.rarityVersion === 2) return item;
+      if (!Number.isInteger(item.rarity) || item.rarity < 0 || item.rarity > 4) return item;
+      migrated = true;
+      return {
+        ...item,
+        rarity: item.rarity === 4 ? 6 : item.rarity + 2,
+        rarityVersion: 2
+      };
+    });
+    const validItems = normalizedItems.filter(item =>
       item && typeof item.id === "string" && typeof item.weapon === "string" &&
       typeof item.skin === "string" && Number.isInteger(item.rarity) &&
       item.rarity >= 0 && item.rarity < RARITIES.length &&
       typeof item.image === "string" && item.image.startsWith("assets/") &&
       typeof item.caseName === "string" && typeof item.acquiredAt === "string"
     );
+    if (migrated) localStorage.setItem(`${STORAGE_PREFIX}OwnedItems`, JSON.stringify(validItems));
+    return validItems;
   } catch { return []; }
 }
 
@@ -93,6 +127,7 @@ function storeOwnedItem(weapon, caseItem) {
     weapon: weapon.weapon,
     skin: weapon.skin,
     rarity: weapon.rarity,
+    rarityVersion: 2,
     image: weapon.image,
     caseId: caseItem.id,
     caseName: caseItem.name,
@@ -141,7 +176,7 @@ function renderVault() {
   });
   $("#vaultNavCount").textContent = ownedItems.length;
   $("#vaultTotal").textContent = ownedItems.length;
-  $("#vaultGoldTotal").textContent = ownedItems.filter(item => item.rarity === 4).length;
+  $("#vaultGoldTotal").textContent = ownedItems.filter(item => item.rarity === 6).length;
   $("#vaultVisibleCount").textContent = `${sortedItems.length} 件物品`;
   $("#vaultGrid").innerHTML = sortedItems.map((item, index) => {
     const rarity = RARITIES[item.rarity];
@@ -163,7 +198,7 @@ function renderVault() {
   $("#vaultGrid").hidden = isEmpty;
   $("#vaultEmpty").hidden = !isEmpty;
   $("#vaultEmpty h2").textContent = ownedItems.length ? "没有这个稀有度的物品" : "仓库中还没有物品";
-  $("#vaultEmpty p").textContent = ownedItems.length ? "切换其他稀有度，查看已有收藏品。" : "开启任意武器箱，获得的物品会自动存入这里。";
+  $("#vaultEmpty p").textContent = ownedItems.length ? "切换其他稀有度，查看已有收藏品。" : "开启任意容器，获得的物品会自动存入这里。";
 }
 
 function switchWorkspace(view) {
@@ -179,6 +214,10 @@ function switchWorkspace(view) {
 
 function selectedCase() { return CASES.find(item => item.id === selectedId); }
 
+function hasContainerSupply(item) {
+  return stock[item.id].cases > 0 && (!item.requiresKey || stock[item.id].keys > 0);
+}
+
 function setTheme(item) {
   document.documentElement.style.setProperty("--case-tint", item.tint);
   document.documentElement.style.setProperty("--case-tint-rgb", item.rgb);
@@ -186,13 +225,16 @@ function setTheme(item) {
 
 function renderInventory() {
   const type = activeTab === "cases" ? "cases" : "keys";
-  inventoryList.innerHTML = CASES.map(item => {
+  const visibleItems = activeTab === "cases" ? CASES : CASES.filter(item => item.requiresKey);
+  inventoryList.innerHTML = visibleItems.map(item => {
     const isSelected = item.id === selectedId;
     const thumb = activeTab === "cases" ? `<img class="item-thumb" src="${item.image}" alt="" />` : `<span class="key-thumb" aria-hidden="true"></span>`;
     const label = activeTab === "cases" ? item.name : item.key;
+    const supplyLabel = item.requiresKey ? `添加一组${item.name}和钥匙` : `添加一个${item.name}`;
+    const supplyTitle = item.requiresKey ? "同时添加箱子与钥匙" : "添加一个无需钥匙的纪念包";
     return `<article class="inventory-item ${isSelected ? "selected" : ""}" data-id="${item.id}" style="--case-tint:${item.tint};--case-tint-rgb:${item.rgb}">
       <button class="item-main" type="button" aria-label="选择${label}">${thumb}<span class="item-copy"><b>${label}</b><small>库存 <em>× ${stock[item.id][type]}</em></small></span></button>
-      <button class="add-one" type="button" aria-label="添加一组${item.name}和钥匙" title="同时添加箱子与钥匙">+</button>
+      <button class="add-one" type="button" aria-label="${supplyLabel}" title="${supplyTitle}">+</button>
     </article>`;
   }).join("");
   updateCounts();
@@ -213,24 +255,45 @@ function renderSelected() {
   $("#caseImage").alt = item.name;
   $("#selectedCaseName").textContent = item.name;
   $("#caseSeries").textContent = item.series;
-  $("#selectedKeyName").textContent = item.key;
-  $("#selectedKeyCount").textContent = `× ${stock[item.id].keys}`;
-  $("#keySlot").setAttribute("aria-label", `已选择${item.key}`);
-  const hasPair = stock[item.id].cases > 0 && stock[item.id].keys > 0;
-  $("#openButton").disabled = !hasPair;
-  $("#openButton span").textContent = hasPair ? "开启容器" : "库存不足";
+  $("#caseDescription").textContent = item.requiresKey
+    ? "选择对应钥匙，开启后将随机获得一件收藏品。"
+    : "纪念包无需钥匙，开启后将随机获得一件古堡激战收藏品。";
+  $("#keySlot").classList.toggle("keyless", !item.requiresKey);
+  $("#keySlot small").textContent = item.requiresKey ? "已匹配钥匙" : "纪念包认证";
+  $("#selectedKeyName").textContent = item.requiresKey ? item.key : "无需钥匙";
+  $("#selectedKeyCount").textContent = item.requiresKey ? `× ${stock[item.id].keys}` : "免费开启";
+  $("#keySlot").setAttribute("aria-label", item.requiresKey ? `已选择${item.key}` : `${item.name}无需钥匙`);
+  const hasSupply = hasContainerSupply(item);
+  $("#openButton").disabled = !hasSupply;
+  $("#openButton span").textContent = hasSupply ? "开启容器" : "库存不足";
+  $("#openButton small").textContent = item.requiresKey ? "消耗 1 个箱子 + 1 把钥匙" : "消耗 1 个纪念包 · 无需钥匙";
+  renderOdds(item);
   renderPreview();
+}
+
+function renderOdds(item) {
+  const totalWeight = item.odds.reduce((sum, entry) => sum + entry.weight, 0);
+  $("#rarityList").innerHTML = item.odds.map(entry => {
+    const rarity = RARITIES[entry.rarity];
+    const percent = entry.weight / totalWeight * 100;
+    const digits = percent < .2 ? 3 : 2;
+    return `<div style="--color:${rarity.color}"><i></i><span>${rarity.name}</span><b>${percent.toFixed(digits)}%</b></div>`;
+  }).join("");
 }
 
 function renderPreview() {
   const item = selectedCase();
-  const regularItems = item.pool.filter(weapon => weapon.rarity < 4);
-  $("#previewCount").textContent = `${regularItems.length} + ★`;
+  const regularItems = item.pool.filter(weapon => weapon.rarity !== 6);
+  const hasSpecialItems = item.pool.some(weapon => weapon.rarity === 6);
+  $("#previewCount").textContent = hasSpecialItems ? `${regularItems.length} + ★` : `${regularItems.length} ITEMS`;
   const regularMarkup = regularItems.slice(-5).map(weapon => {
     const rarity = RARITIES[weapon.rarity];
     return `<div class="preview-item" style="--rarity:${rarity.color}" title="${weapon.weapon} | ${weapon.skin}"><img src="${weapon.image}" alt="${weapon.weapon} ${weapon.skin}" /></div>`;
   }).join("");
-  $("#previewGrid").innerHTML = regularMarkup + `<div class="preview-item special" style="--rarity:${RARITIES[4].color}" title="★ 罕见特殊物品"><span class="gold-token small"><i>★</i></span></div>`;
+  const specialMarkup = hasSpecialItems
+    ? `<div class="preview-item special" style="--rarity:${RARITIES[6].color}" title="★ 罕见特殊物品"><span class="gold-token small"><i>★</i></span></div>`
+    : "";
+  $("#previewGrid").innerHTML = regularMarkup + specialMarkup;
 }
 
 function selectCase(id) {
@@ -243,13 +306,14 @@ function selectCase(id) {
 }
 
 function addPair(id) {
+  const item = CASES.find(entry => entry.id === id);
   stock[id].cases += 1;
-  stock[id].keys += 1;
+  if (item.requiresKey) stock[id].keys += 1;
   saveStock();
   renderInventory();
   renderSelected();
-  const item = CASES.find(entry => entry.id === id);
-  showToast("补给已入库", `${item.name} ×1 · 对应钥匙 ×1`);
+  const message = item.requiresKey ? `${item.name} ×1 · 对应钥匙 ×1` : `${item.name} ×1 · 无需钥匙`;
+  showToast("补给已入库", message);
   playTone(620, .08, .04);
 }
 
@@ -262,25 +326,25 @@ function showToast(title, message) {
   setTimeout(() => toast.remove(), 2750);
 }
 
-function randomRarity() {
-  let roll = Math.floor(Math.random() * 10000);
-  for (let index = 0; index < RARITIES.length; index++) {
-    roll -= RARITIES[index].weight;
-    if (roll < 0) return index;
+function randomRarity(item) {
+  const totalWeight = item.odds.reduce((sum, entry) => sum + entry.weight, 0);
+  let roll = Math.floor(Math.random() * totalWeight);
+  for (const entry of item.odds) {
+    roll -= entry.weight;
+    if (roll < 0) return entry.rarity;
   }
-  return 0;
+  return item.odds[0].rarity;
 }
 
 function pickItemForRarity(item, rarityIndex) {
   let candidates = item.pool.filter(weapon => weapon.rarity === rarityIndex);
-  if (!candidates.length) candidates = item.pool.filter(weapon => weapon.rarity === Math.min(rarityIndex,3));
   if (!candidates.length) candidates = item.pool;
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
 function itemCard(weapon) {
   const rarity = RARITIES[weapon.rarity];
-  if (weapon.rarity === 4) {
+  if (weapon.rarity === 6) {
     return `<div class="roulette-card special-card" style="--rarity:${rarity.color};--rarity-rgb:${rarity.rgb}"><span class="gold-token"><i>★</i></span><span>★</span><b>罕见特殊物品</b></div>`;
   }
   return `<div class="roulette-card" style="--rarity:${rarity.color};--rarity-rgb:${rarity.rgb}"><img src="${weapon.image}" alt="" /><span>${weapon.weapon}</span><b>${weapon.skin}</b></div>`;
@@ -288,19 +352,19 @@ function itemCard(weapon) {
 
 async function openCase() {
   const item = selectedCase();
-  if (spinning || stock[item.id].cases < 1 || stock[item.id].keys < 1) return;
+  if (spinning || !hasContainerSupply(item)) return;
   spinning = true;
   stock[item.id].cases -= 1;
-  stock[item.id].keys -= 1;
+  if (item.requiresKey) stock[item.id].keys -= 1;
   saveStock();
   $("#caseScene").classList.add("opening");
   playUnlock();
   await delay(850);
 
-  const winningRarity = randomRarity();
-  let winner = winningRarity === 4 ? null : pickItemForRarity(item, winningRarity);
-  const winningCard = winningRarity === 4 ? SPECIAL_TOKEN : winner;
-  const regularPool = item.pool.filter(poolItem => poolItem.rarity < 4);
+  const winningRarity = randomRarity(item);
+  let winner = winningRarity === 6 ? null : pickItemForRarity(item, winningRarity);
+  const winningCard = winningRarity === 6 ? SPECIAL_TOKEN : winner;
+  const regularPool = item.pool.filter(poolItem => poolItem.rarity !== 6);
   const winnerIndex = 50;
   const strip = Array.from(
     { length: 58 },
@@ -329,7 +393,7 @@ async function openCase() {
   await delay(ROULETTE_DURATION_MS + 20);
   clearInterval(percentTimer);
   $("#decryptPercent").textContent = "100%";
-  if (winningRarity === 4) winner = pickItemForRarity(item, 4);
+  if (winningRarity === 6) winner = pickItemForRarity(item, 6);
   playWin(item.pool.indexOf(winner));
   await delay(420);
   storeOwnedItem(winner, item);
@@ -343,14 +407,14 @@ function showResult(weapon, item) {
   $("#resultWeapon img").src = weapon.image;
   $("#resultWeapon img").alt = `${weapon.weapon} ${weapon.skin}`;
   $("#resultName").textContent = `${weapon.weapon} | ${weapon.skin}`;
-  $("#resultCollection").textContent = item.name.replace("武器箱","收藏品");
+  $("#resultCollection").textContent = item.resultCollection;
   $("#resultRarity").textContent = rarity.name;
   $("#resultContent").style.setProperty("--result-color", rarity.color);
   $("#resultContent").style.setProperty("--result-rgb", rarity.rgb);
   const modal = $("#resultModal");
   modal.classList.add("visible");
   modal.setAttribute("aria-hidden", "false");
-  $("#openAgainButton").disabled = stock[item.id].cases < 1 || stock[item.id].keys < 1;
+  $("#openAgainButton").disabled = !hasContainerSupply(item);
   $("#openAgainButton").textContent = $("#openAgainButton").disabled ? "库存不足" : "再开一次";
 }
 
