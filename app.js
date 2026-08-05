@@ -70,6 +70,8 @@ const inventoryList = $("#inventoryList");
 const stage = $(".opening-stage");
 const rouletteWrap = $("#rouletteWrap");
 const rouletteTrack = $("#rouletteTrack");
+const skipAnimationInput = $("#skipAnimation");
+skipAnimationInput.checked = readStoredValue("SkipAnimation") === "true";
 
 function loadStock() {
   try {
@@ -357,12 +359,22 @@ async function openCase() {
   stock[item.id].cases -= 1;
   if (item.requiresKey) stock[item.id].keys -= 1;
   saveStock();
+
+  const winningRarity = randomRarity(item);
+  const winner = pickItemForRarity(item, winningRarity);
+  if (skipAnimationInput.checked) {
+    playWin(item.pool.indexOf(winner));
+    storeOwnedItem(winner, item);
+    showResult(winner, item);
+    renderInventory();
+    renderSelected();
+    return;
+  }
+
   $("#caseScene").classList.add("opening");
   playUnlock();
   await delay(850);
 
-  const winningRarity = randomRarity(item);
-  let winner = winningRarity === 6 ? null : pickItemForRarity(item, winningRarity);
   const winningCard = winningRarity === 6 ? SPECIAL_TOKEN : winner;
   const regularPool = item.pool.filter(poolItem => poolItem.rarity !== 6);
   const winnerIndex = 50;
@@ -393,7 +405,6 @@ async function openCase() {
   await delay(ROULETTE_DURATION_MS + 20);
   clearInterval(percentTimer);
   $("#decryptPercent").textContent = "100%";
-  if (winningRarity === 6) winner = pickItemForRarity(item, 6);
   playWin(item.pool.indexOf(winner));
   await delay(420);
   storeOwnedItem(winner, item);
@@ -465,6 +476,9 @@ document.querySelectorAll(".inventory-tabs button").forEach(button => button.add
 }));
 
 $("#openButton").addEventListener("click", openCase);
+skipAnimationInput.addEventListener("change", () => {
+  localStorage.setItem(`${STORAGE_PREFIX}SkipAnimation`, String(skipAnimationInput.checked));
+});
 $("#closeResultButton").addEventListener("click", () => closeResult(false));
 $("#openAgainButton").addEventListener("click", () => { if (!$("#openAgainButton").disabled) closeResult(true); });
 $("#soundToggle").addEventListener("click", event => { soundEnabled = !soundEnabled; event.currentTarget.classList.toggle("muted", !soundEnabled); event.currentTarget.setAttribute("aria-pressed", soundEnabled); if (soundEnabled) playTone(540,.06,.025); });
