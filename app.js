@@ -16,12 +16,12 @@ const STANDARD_ODDS = [
   { rarity: 6, weight: 154 }
 ];
 const COBBLESTONE_ODDS = [
-  { rarity: 0, weight: 78532 },
+  { rarity: 0, weight: 77032 },
   { rarity: 1, weight: 16000 },
   { rarity: 2, weight: 3200 },
   { rarity: 3, weight: 640 },
   { rarity: 4, weight: 128 },
-  { rarity: 5, weight: 1500 }
+  { rarity: 5, weight: 3000 }
 ];
 const CASES = [
   { id: "recoil", name: "反冲武器箱", key: "反冲武器箱钥匙", series: "RECOIL COLLECTION", resultCollection: "反冲收藏品", image: "assets/items/recoil/case.png", tint: "#9eab65", rgb: "158,171,101" },
